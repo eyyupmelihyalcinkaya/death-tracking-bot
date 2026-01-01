@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ] 
   schedule:
-    - cron:  '* * * * *'   # 12 saat için '0 */12 * * *' 
+    - cron:  '*/15 * * * *'   # 12 saat için '0 */12 * * *' 
   workflow_dispatch: 
 
 jobs:
