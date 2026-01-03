@@ -34,13 +34,13 @@ cd "vefat listesi"
 pip install -r requirements.txt
 ```
 
-3. Proje kök dizininde `.env` dosyası oluşturun ve gerekli bilgileri ekleyin:
+3. Proje kök dizininde `.env` dosyası oluşturun ve gerekli bilgileri ekleyin (Birden fazla receiver varsa virgül ile ayırarak ekleyin):
 ```
 SUPABASE_URL=your_supabase_url
 SUPABASE_KEY=your_supabase_key
 EMAIL_USER=your_email@gmail.com
 EMAIL_PASSWORD=your_app_password
-EMAIL_RECEIVER=receiver@email.com
+EMAIL_RECEIVER=receiver@email.com,receiver2@email.com,..
 ```
 
 ## Kullanım
