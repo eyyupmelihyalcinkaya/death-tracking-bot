@@ -53,6 +53,7 @@ def send_email(new_items):
     sender = os.getenv('EMAIL_USER')
     password = os.getenv('EMAIL_PASSWORD')
     receiver_raw = os.getenv('EMAIL_RECEIVER', "")
+    sender_email = "melih@heom.com.tr"
     # Virgülle ayrılmış metni temiz bir listeye çeviriyoruz
     receiver_list = [email.strip() for email in receiver_raw.split(',') if email.strip()]
     
@@ -131,25 +132,27 @@ def send_email(new_items):
     full_html = html_content_header + cards_html + html_content_footer
 
     try:
-        # SMTP sunucusuna bir kez bağlanıyoruz
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+        # SMTP_SSL yerine standart SMTP kullanıyoruz
+        with smtplib.SMTP('smtp-relay.brevo.com', 587) as server:
+            print(f"Bilgi: Brevo sunucusuna {sender} ile bağlanılıyor...")
+            server.starttls()  # Bağlantıyı güvenli hale getiren kritik satır
             server.login(sender, password)
             
-            # Her bir alıcı için döngü başlatıyoruz
+            # Her bir alıcı için döngü
             for recipient in receiver_list:
-                # Her seferinde yeni bir mesaj objesi oluşturuyoruz
                 msg = MIMEMultipart("alternative")
-                msg['From'] = f"Vefat Takip Sistemi <{sender}>"
-                msg['To'] = recipient  # Sadece o anki alıcıyı yazıyoruz
-                msg['Subject'] = f"Yeni Vefat İlanı: {len(new_items)} Kayıt Mevcut"
+                # Gönderen adresinin Brevo'da doğrulanmış olması şarttır
+                msg['From'] = f"Vefat Takip Sistemi <{sender_email}>"
+                msg['To'] = recipient
+                # Daha önce istediğin manevi başlığı buraya ekledim
+                msg['Subject'] = "İnnâ lillâhi ve innâ ileyhi raciûn"
                 
                 msg.attach(MIMEText(full_html, 'html', 'utf-8'))
                 
-                # Gönderimi yapıyoruz
                 server.sendmail(sender, recipient, msg.as_string())
-                print(f"E-posta gönderildi: {recipient}")
+                print(f"E-posta başarıyla gönderildi: {recipient}")
                 
-        print(f"Toplam {len(receiver_list)} kişiye ayrı ayrı gönderim tamamlandı.")
+        print(f"Toplam {len(receiver_list)} kişiye gönderim tamamlandı.")
         
     except Exception as e:
         print(f"Gönderim hatası: {e}")
