@@ -145,7 +145,7 @@ def send_email(new_items):
                 msg['From'] = f"Vefat Takip Sistemi <{sender_email}>"
                 msg['To'] = recipient
                 # Daha önce istediğin manevi başlığı buraya ekledim
-                msg['Subject'] = "İnnâ lillâhi ve innâ ileyhi raciûn"
+                msg['Subject'] = f"Vefat Bildirim Mesajı - {len(new_items)}"
                 
                 msg.attach(MIMEText(full_html, 'html', 'utf-8'))
                 
